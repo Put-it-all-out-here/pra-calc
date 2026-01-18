@@ -446,46 +446,26 @@ $(function () {
             answerUi.openAnswerBoxForLi($(this));
         });
 
-        // ===== long-press (mobile) =====
-        /** @type {ReturnType<typeof setTimeout> | null} */
-        let longPressTimer = null;
-        /** @type {{x:number, y:number} | null} */
-        let longPressStart = null;
-
-        $(document).on('pointerdown', `[data-role="${CONFIG.role.questionsList}"] > li`, function (e) {
-            // 左クリック/タッチのみ想定（右クリック等は無視）
-            if (e.button != null && e.button !== 0) return;
-
-            // 回答エリア上は対象外
+        // ===== open/close by click (PC & mobile) =====
+        $(document).on('click', `[data-role="${CONFIG.role.questionsList}"] > li`, function (e) {
+            // 回答エリア上の操作（check/close/入力など）は邪魔しない
             if ($(e.target).closest(`[data-role="${CONFIG.role.answerBox}"]`).length > 0) return;
 
+            // テキスト選択（コピー）中は開閉しない
+            const sel = window.getSelection ? window.getSelection() : null;
+            if (sel && String(sel.toString() ?? '').length > 0) return;
+
             const $li = $(this);
-            longPressStart = { x: e.clientX, y: e.clientY };
 
-            if (longPressTimer != null) clearTimeout(longPressTimer);
-            longPressTimer = setTimeout(() => {
-                answerUi.openAnswerBoxForLi($li);
-                longPressTimer = null;
-            }, CONFIG.answer.longPressMs);
-        });
-
-        $(document).on('pointermove', `[data-role="${CONFIG.role.questionsList}"] > li`, function (e) {
-            if (!longPressTimer || !longPressStart) return;
-
-            const dx = Math.abs(e.clientX - longPressStart.x);
-            const dy = Math.abs(e.clientY - longPressStart.y);
-
-            // 指が動いたらキャンセル（スクロール対策）
-            if (dx > CONFIG.answer.moveCancelThresholdPx || dy > CONFIG.answer.moveCancelThresholdPx) {
-                clearTimeout(longPressTimer);
-                longPressTimer = null;
+            // すでに開いているなら閉じる（UI追加なしでトグル）
+            const $box = $li.children(`[data-role="${CONFIG.role.answerBox}"]`);
+            if ($box.length > 0) {
+                answerUi.closeAnswerBox($box);
+                return;
             }
-        });
 
-        $(document).on('pointerup pointercancel', `[data-role="${CONFIG.role.questionsList}"] > li`, function () {
-            if (longPressTimer != null) clearTimeout(longPressTimer);
-            longPressTimer = null;
-            longPressStart = null;
+            // 未置換（oprdが残っている）なら openAnswerBoxForLi が何もしない仕様
+            answerUi.openAnswerBoxForLi($li);
         });
 
         // ===== answerbox buttons（委譲）=====
