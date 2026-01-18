@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>pra-cal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/generate-question.css" />
+    <script src="js/jquery-3.7.1.js"></script>
+    <script type="module" src="js/generate-question.js"></script>
+    
+</head>
+<body>
+
+    <header>
+        <h1>GENERATE-QUESTION</h1>
+    </header>
+    <main>
+        <div class="section" data-role="section">
+            <hr>
+            <div class="section__head">
+                <h2 class="section__title">setting</h2>
+                <button type="button" class="section__toggle" data-role="section-toggle" aria-expanded="true">
+                    −
+                </button>
+            </div>
+            <div class="section__body" data-role="section-body">
+                <ul>
+                    <li data-role="num-of-questions">
+                        <label for="num-of-questions">num of questions:</label>
+                        <div class="numstep">
+                            <button type="button" class="numstep__btn" data-role="step-minus" aria-label="decrease">−</button>
+                            <input
+                                id="num-of-questions" 
+                                type="number" 
+                                value="1" 
+                                min="1" 
+                                max="10" 
+                                step="1"
+                                inputmode="numeric">
+                            <button type="button" class="numstep__btn" data-role="step-plus" aria-label="increase">＋</button>
+                        </div>
+                    </li>
+                    <li data-role="num-of-operands">
+                        <label for="num-of-operands">
+                            num of operands (oprd):
+                        </label>
+                        <div class="numstep">
+                            <button type="button" class="numstep__btn" data-role="step-minus" aria-label="decrease">−</button>
+                            <input 
+                                id="num-of-operands" 
+                                type="number" 
+                                value="2" 
+                                min="2" 
+                                max="10" 
+                                step="1"
+                                inputmode="numeric">
+                            <button type="button" class="numstep__btn" data-role="step-plus" aria-label="increase">＋</button>
+                        </div>
+                    </li>
+                    <li data-role="type-of-operators">
+                        <label>
+                            type of operators(oprt):
+                        </label>
+                        <select>
+                            <option value="+" selected>+</option>
+                            <option value="-">-</option>
+                            <option value="*">*</option>
+                            <option value="/">/</option>
+                        </select>
+                    </li>
+                    <li data-role="num-of-digits">
+                        <label for="num-of-digits">num of digits:</label>
+                        <div class="numstep">
+                            <button type="button" class="numstep__btn" data-role="step-minus" aria-label="decrease">−</button>
+                            <input 
+                                id="num-of-digits" 
+                                type="number" 
+                                value="1" 
+                                min="1" 
+                                max="10" 
+                                step="1"
+                                inputmode="numeric">     
+                            <button type="button" class="numstep__btn" data-role="step-plus" aria-label="increase">＋</button>
+                        </div>
+
+                    </li>
+                </ul>
+                <div>
+                    <button class="btn-block" data-role="replace-operands-with-random-num">
+                        replace operands with random number
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="section" data-role="section">
+            <hr>
+            <div class="section__head">
+                <h2 class="section__title">questions</h2>
+                <button type="button" class="section__toggle" data-role="section-toggle" aria-expanded="true">
+                    −
+                </button>                
+            </div>
+            <div class="section__body" data-role="section-body">
+                <ol class="questions-list" data-role="questions-list">
+                </ol>
+            </div>
+        </div>
+        <div class="section" data-role="section">
+            <hr>
+            <div class="section__head">
+                <h2 class="section__title">save</h2>
+                <button type="button" class="section__toggle" data-role="section-toggle" aria-expanded="true">
+                    −
+                </button>
+            </div>
+            <div class="section__body" data-role="section-body">
+
+                <ul>
+                    <li data-role="set-name">
+                        <label for="set-name">set name:</label>
+                        <input id="set-name" 
+                            type="text" 
+                            placeholder="unique name"
+                            >
+                    </li>
+                    <li data-role="questions-memo">
+                        <label for="questions-memo">memo:</label>
+                        <input id="questions-memo" 
+                            type="text" 
+                            placeholder="e.g. for kids / drill 1">
+                    </li>
+                </ul>
+                <button class="btn-block" data-role="save-questions-within-browser">
+                    save questions within browser
+                </button>
+            </div>
+        </div>
+        <div class="section" data-role="section">
+            <hr>
+            <div class="section__head">
+
+                <h2 class="section__title">saved sets</h2>
+                <button type="button" class="section__toggle" data-role="section-toggle" aria-expanded="true">
+                    −
+                </button>
+            </div>
+            <div class="section__body" data-role="section-body">
+
+                <select data-role="saved-sets-select">
+                    <option value="">(select a set)</option>
+                </select>
+                <br>
+                <br>
+                <button class="btn-block" data-role="load-saved-set">
+                    load selected set
+                </button>
+                <br>
+                <br>
+                <button class="btn-block" data-role="delete-saved-set">
+                    delete selected set
+                </button>
+                
+                <div data-role="saved-set-preview">
+                    <h3>preview</h3>
+                    <div>
+                        id: <span data-role="saved-set-preview-id"></span>
+                    </div>
+                    <div>
+                        stats: <span data-role="saved-set-preview-stats"></span>
+                    </div>
+                    <div>
+                        memo: <span data-role="saved-set-preview-memo"></span>
+                    </div>
+                    <div>
+                        createdAt: <span data-role="saved-set-preview-created-at"></span>
+                    </div>
+                    
+                    <div>
+                        questions:
+                        <pre class="saved-set-preview-questions" data-role="saved-set-preview-questions"></pre>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </main>
+    <footer>
+    <iframe
+        src="https://github.com/sponsors/Put-it-all-out-here/button"
+        title="Sponsor Put-it-all-out-here"
+        height="35"
+        width="116"
+        style="border: 0;">
+    </iframe>
+    </footer>
+    <script>
+
+    </script>
+</body>
+</html>
